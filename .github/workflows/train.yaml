@@ -1,5 +1,13 @@
 name: Train workflow
+
+
 on: [push]
+
+
+permissions:
+  contents: write
+
+
 jobs:
   train:
     name: Train job
