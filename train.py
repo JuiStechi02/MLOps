@@ -17,13 +17,17 @@ df['is_child'] = (df['Age'] < 16).astype(int)
 df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'family_size', 'is_child']]
 
 
+
 X = df.drop('Survived', axis=1)
 y = df['Survived']
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
 
-
+print("Dataset shape:", df.shape)
+print("Class distribution:\n", df['Survived'].value_counts())
+print("Correlation with Survived:\n", df.corr()['Survived'].sort_values())
+print("Train size:", X_train.shape[0], "Test size:", X_test.shape[0])
 model = XGBClassifier(n_estimators=50, max_depth=2)
 model.fit(X_train, y_train)
 
