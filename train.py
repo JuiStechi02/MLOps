@@ -6,9 +6,15 @@ from xgboost import XGBClassifier
 
 
 df = pd.read_csv("titanic.csv")
-df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare']]
+df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'SibSp', 'Parch']]
 df['Sex'] = df['Sex'].map({'male': 0, 'female': 1})
 df['Age'] = df['Age'].fillna(df['Age'].median())
+
+df['family_size'] = df['SibSp'] + df['Parch'] + 1
+df['is_child'] = (df['Age'] < 16).astype(int)
+
+
+df = df[['Survived', 'Pclass', 'Sex', 'Age', 'Fare', 'family_size', 'is_child']]
 
 
 X = df.drop('Survived', axis=1)
@@ -18,7 +24,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 )
 
 
-model = XGBClassifier()
+model = XGBClassifier(n_estimators=50, max_depth=2)
 model.fit(X_train, y_train)
 
 
